@@ -19,7 +19,7 @@ RUN apt-get update \
   # Install ipyleaflet.
   && pip install ipyleaflet \
   && jupyter nbextension enable --py --sys-prefix ipyleaflet \
-  # Install Earth Engine dependencies
+  # Install Earth Engine dependencies.
   && apt-get install -y --no-install-recommends \
              build-essential \
              libssl-dev \
