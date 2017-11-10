@@ -1,6 +1,6 @@
-FROM jupyter/minimal-notebook
+FROM jupyter/scipy-notebook@sha256:3f145cc7967ce5ad157f57653180801e3dd26f4c97afa267870195db6ebcec60
 
-MAINTAINER Tyler Erickson <tylere@google.com>
+LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
 USER root
 
@@ -10,11 +10,12 @@ RUN apt-get update \
              libgif-dev \
              libcairo2-dev \
              pkg-config \
-  && pip install ipywidgets \
-  && jupyter nbextension enable --py widgetsnbextension --sys-prefix \
-  && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
-  && pip install ipyleaflet \
+  && pip install ipywidgets==7.0.3 \
+  && jupyter nbextension enable --py --sys-prefix widgetsnbextension  \
+  && jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.29.3 \
+  && pip install ipyleaflet==0.5.1 \
   && jupyter nbextension enable --py --sys-prefix ipyleaflet \
+  && jupyter labextension install jupyter-leaflet@0.5.0 \
   && apt-get install -y --no-install-recommends \
              build-essential \
              libssl-dev \
@@ -30,11 +31,6 @@ RUN apt-get update \
   && apt-get autoremove -y \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-
-# Install the JupyterLab extension for ipyleaflet (currently not available on npm).
-RUN git clone https://github.com/tylere/ipyleaflet.git \
-  && jupyter labextension install ipyleaflet/jslab \
-  && rm -fr ipyleaflet
 
 # Install the Earth Engine Python API.
 # This is installed as the last step because the package is updated often.
